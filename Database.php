@@ -6,6 +6,7 @@ class Database {
 
     // Connect to database.
     public function __construct($username = "root", $password = "root", $host = "localhost", $dbname = "pdoTest", $options = []) {
+        $this->isConn = TRUE;
         try {
             $this->datab = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password, $options);
             $this->datab->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,29 +22,47 @@ class Database {
         $this->isConn = FALSE;
     }
 
-    // Get a row.
-    public function getRow() {
-
+    // Get a row from the db.
+    public function getRow($query, $params = []) {
+        try {
+            $stmt = $this->datab->prepare($query);
+            $stmt->execute($params);
+            return $stmt->fetch();
+        } catch(PDOException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
-    // Get Rows.
-    public function getRows() {
-
+    // Get Rows from the db.
+    public function getRows($query, $params = []) {
+        try {
+            $stmt = $this->datab->prepare($query);
+            $stmt->execute($params);
+            return $stmt->fetchAll();
+        } catch(PDOException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
-    // Insert Row.
-    public function insertRow() {
-
+    // Insert a Row into the db.
+    public function insertRow($query, $params = []) {
+        try {
+            $stmt = $this->datab->prepare($query);
+            $stmt->execute($params);
+            return TRUE;
+        } catch(PDOException $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
-    // Update Row.
-    public function updateRow() {
-
+    // Update a Row in the db.
+    public function updateRow($query, $params = []) {
+        $this->insertRow($query, $params);
     }
 
     // Delete Row.
-    public function deleteRow() {
-
+    public function deleteRow($query, $params = []) {
+        $this->insertRow($query, $params);
     }
 }
 
