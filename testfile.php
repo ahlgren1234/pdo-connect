@@ -30,4 +30,6 @@ $db = new Database();
 // deleteRow
 $deleteRow = $db->deleteRow("DELETE FROM users WHERE id = ?", ["1"]);
 die_r($deleteRow);
+
+$db->Disconnect();
 ?>
